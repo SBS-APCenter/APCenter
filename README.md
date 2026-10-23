@@ -94,6 +94,16 @@ Assets/
 [Sound] 레벨업 SFX 추가
 ```
 
+# 브랜치 네이밍 컨벤션
+
+## <type>/<content>
+
+예시:
+
+`feature/move`
+
+`fix/move`
+
 # **커밋 컨벤션**
 
 Conventional Commits 규칙을 따릅니다.
