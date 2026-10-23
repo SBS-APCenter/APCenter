@@ -128,6 +128,11 @@ art : 메인 화면 이미지 추가
 sound : 이벤트 sfx 추가
 ```
 
+## PR 규칙
+main: PR 필수 + 승인 1명 이상
+develop: PR 필수 + 승인 1명 이상
+integration: PR 필수 + 승인 1명 이상 권장
+
 # Art팀 전달사항
 GitHub Desktop 사용하여 파일 업로드
 
