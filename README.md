@@ -66,6 +66,17 @@ Assets/
 └── ThirdParty/                  # 외부 에셋
 ```
 
+## **브랜치**
+```
+main : 배포용
+develop : 내부 빌드 테스트(항상 run 가능한 상태 유지)
+integration : 각 파트 리소스 합치는 브랜치
+art/@@@ : 아트팀 리소스 업로드 브랜치
+sound/@@@ : bgm, sfx 등 사운드 업로드 브랜치
+
+프로그래밍 인원들은 이슈에 따라 브랜치 네이밍해서 생성
+```
+
 ## **이슈 / PR 제목**
 
 ```
@@ -97,12 +108,13 @@ Assets/
 # 브랜치 네이밍 컨벤션
 
 ## <type>/<content>
-
+```
 예시:
 
 `feature/move`
 
 `fix/move`
+```
 
 # **커밋 컨벤션**
 
@@ -139,9 +151,11 @@ sound : 이벤트 sfx 추가
 ```
 
 ## PR 규칙
+```
 main: PR 필수 + 승인 1명 이상
 develop: PR 필수 + 승인 1명 이상
 integration: PR 필수 + 승인 1명 이상 권장
+```
 
 # Art팀 전달사항
 GitHub Desktop 사용하여 파일 업로드
