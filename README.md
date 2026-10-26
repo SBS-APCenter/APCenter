@@ -106,8 +106,9 @@ sound/@@@ : bgm, sfx 등 사운드 업로드 브랜치
 ```
 
 # 브랜치 네이밍 컨벤션
-
-## <type>/<content>
+```
+<type>/<content>
+```
 ```
 예시:
 
