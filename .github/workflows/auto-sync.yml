@@ -1,0 +1,97 @@
+
+name: Auto Sync Art Sound Integration
+
+on:
+  push:
+    branches:
+      - integration
+      - 'art/**'
+      - 'sound/**'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-sync-team-branches
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: integration
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Validate and synchronize
+        shell: bash
+        env:
+          SOURCE_BRANCH: ${{ github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+
+          # 1. 원격 브랜치 최신화
+          git fetch origin \
+            '+refs/heads/*:refs/remotes/origin/*' \
+            --prune
+
+          # 2. integration 후보 생성
+          git switch -C integration origin/integration
+
+          # 3. art/sound Push면 integration에 병합
+          if [[ "$EVENT_NAME" == "push" ]]; then
+            if [[ "$SOURCE_BRANCH" == art/* ||
+                  "$SOURCE_BRANCH" == sound/* ]]; then
+
+              echo "Merging $SOURCE_BRANCH"
+              git merge --no-edit \
+                "origin/$SOURCE_BRANCH"
+            fi
+          fi
+
+          # 4. art/sound 브랜치 목록 조회
+          mapfile -t TEAM_BRANCHES < <(
+            git for-each-ref \
+              --format='%(refname:strip=3)' \
+              refs/remotes/origin/art/ \
+              refs/remotes/origin/sound/
+          )
+
+          # 5. 모든 팀 브랜치의 병합 검증
+          for branch in "${TEAM_BRANCHES[@]}"; do
+            echo "Checking $branch"
+
+            git switch -C "$branch" "origin/$branch"
+
+            # 충돌 시 종료, Push는 실행하지 않음
+            git merge --no-edit integration
+
+          done
+
+          echo "All merge checks passed"
+
+          # 6. 원격에 병합 결과 반영
+          REFS=(
+            "integration:refs/heads/integration"
+          )
+
+          for branch in "${TEAM_BRANCHES[@]}"; do
+            REFS+=(
+              "$branch:refs/heads/$branch"
+            )
+          done
+
+          git push --atomic origin "${REFS[@]}"
+
+          echo "Synchronization completed"
