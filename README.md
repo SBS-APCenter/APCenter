@@ -159,6 +159,8 @@ integration: PR 필수 + 승인 1명 이상 권장
 ```
 
 # Art팀 전달사항
+GitHub Desktop 사용가이드 : https://app.notion.com/p/402f0582ed50802d99ceff3dce176b58?source=copy_link
+
 GitHub Desktop 사용하여 파일 업로드
 
 이슈 발생 시 반드시 프로그래밍 팀에 전달할 것
