@@ -51,7 +51,7 @@ namespace Mockup
         int nextOrderId = 1;
         bool playerInOffice;
 
-        public bool OfficeOpen => officeUI != null && officeUI.IsOpen;
+        public bool OfficeOpen => officeUI != null && (officeUI.IsOpen || officeUI.IsTransitioning); // 진입 연출 중에도 입력/타이머 차단
         public int PlayerCapacity => (int)config.carrySteps[carryLv].value;
         public float PlayerSpeed => config.speedSteps[speedLv].value;
         public float PlayerWorkTime => config.workTimeSteps[workLv].value;
@@ -104,7 +104,7 @@ namespace Mockup
             // 사무실 구역에 들어가면 바로 클립보드 UI (구역을 나갔다가 다시 들어와야 재오픈)
             bool inOffice = false;
             foreach (var c in cells) if (c.type == ZoneType.Office && c.Contains(player.transform.position, 0f)) inOffice = true;
-            if (inOffice && !playerInOffice && !OfficeOpen) officeUI.Open(-1);
+            if (inOffice && !playerInOffice && !OfficeOpen) officeUI.OpenWithIris(-1, player.transform, mainCamera);
             playerInOffice = inOffice;
         }
 
